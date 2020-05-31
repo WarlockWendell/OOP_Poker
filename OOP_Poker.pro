@@ -1,5 +1,4 @@
-QT       += core gui
-
+QT       += core gui network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
@@ -16,16 +15,34 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    card.cpp \
+    cardpicture.cpp \
+    choosegame.cpp \
+    deskscene.cpp \
+    handcards.cpp \
     main.cpp \
-    widget.cpp
+    maingame.cpp \
+    mainscene.cpp \
+    mypushbutton.cpp \
+    shuffle.cpp
 
 HEADERS += \
-    widget.h
+    card.h \
+    cardpicture.h \
+    choosegame.h \
+    deskscene.h \
+    handcards.h \
+    maingame.h \
+    mainscene.h \
+    mypushbutton.h \
+    shuffle.h
 
-FORMS += \
-    widget.ui
+FORMS +=
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    res.qrc

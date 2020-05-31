@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Image/main_background.png</file>
+        <file>Image/online_button.png</file>
+        <file>Image/offline_button.png</file>
+        <file>Image/quit_button1.png</file>
+        <file>Image/blackjack_button.png</file>
+        <file>Image/landlord_button.png</file>
+        <file>Image/return_button.png</file>
+        <file>Image/card.png</file>
+        <file>Image/desk_background.png</file>
+        <file>Image/handcard_background.png</file>
+        <file>Image/start_button.png</file>
+        <file>Image/return_button2.png</file>
+    </qresource>
+</RCC>
