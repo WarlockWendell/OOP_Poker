@@ -12,5 +12,6 @@
         <file>Image/handcard_background.png</file>
         <file>Image/start_button.png</file>
         <file>Image/return_button2.png</file>
+        <file>Image/clockPic.png</file>
     </qresource>
 </RCC>

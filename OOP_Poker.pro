@@ -18,10 +18,11 @@ SOURCES += \
     card.cpp \
     cardpicture.cpp \
     choosegame.cpp \
-    deskscene.cpp \
+    clock.cpp \
     handcards.cpp \
+    landlordoffline.cpp \
+    landlordofflinedesk.cpp \
     main.cpp \
-    maingame.cpp \
     mainscene.cpp \
     mypushbutton.cpp \
     shuffle.cpp
@@ -30,9 +31,10 @@ HEADERS += \
     card.h \
     cardpicture.h \
     choosegame.h \
-    deskscene.h \
+    clock.h \
     handcards.h \
-    maingame.h \
+    landlordoffline.h \
+    landlordofflinedesk.h \
     mainscene.h \
     mypushbutton.h \
     shuffle.h

@@ -1,4 +1,4 @@
-#include "choosegame.h"
+ #include "choosegame.h"
 #include <QTimer>
 #include <QPainter>
 #include "mypushbutton.h"
@@ -17,7 +17,6 @@ ChooseGame::ChooseGame(int gameType,QWidget* parent):QWidget(parent),GameType(ga
     BlackJackButton->move(this->width()*0.5-BlackJackButton->width()*0.5, this->height()*0.5);
     ReturnButton->move(this->width()*0.5-ReturnButton->width()*0.5, this->height()*0.7);
 
-
     //监听信号
     //返回，点击返回按钮就回到mainScene
     connect(ReturnButton,&MyPushButton::MousePress,[=](){
@@ -30,13 +29,13 @@ ChooseGame::ChooseGame(int gameType,QWidget* parent):QWidget(parent),GameType(ga
         //todo： 单机模式下的两种游戏
         connect(LandlordButton,&MyPushButton::MousePress,[=](){
             qDebug()<<"press offline landlord";
-            DeskScene* test_desk = new DeskScene();
+            LandlordOfflineDesk* test_desk = new LandlordOfflineDesk();
             QTimer::singleShot(200,this,[=](){
                 this->close();
                 test_desk->setGeometry(this->geometry());
                 test_desk->show();
             });
-            connect(test_desk,&DeskScene::ReturnSignal,[=](){
+            connect(test_desk,&LandlordOfflineDesk::ReturnSignal,[=](){
                 test_desk->close();
                 this->setGeometry(test_desk->geometry());
                 this->show();
