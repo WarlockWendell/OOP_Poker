@@ -67,5 +67,6 @@ void MainScene::paintEvent(QPaintEvent *event)
     QPainter painter(this); //定义画家
     QPixmap background;
     background.load(":/Image/mainscene_bg.png");
+    background.load(":/Image/mainscene_bg.PNG");
     painter.drawPixmap(0,0,this->width(),this->height(),background);
 }
