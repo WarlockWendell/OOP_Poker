@@ -8,6 +8,7 @@
 MainScene::MainScene(QWidget *parent) : QWidget(parent)
 {
     this->setFixedSize(1200,800);  //窗口大小
+    setWindowIcon(QIcon(":/Image/icon.PNG")); //设置图标
     //主界面的三个按钮
     MyPushButton* OnlineButton = new MyPushButton(":/Image/online_button.png");
     MyPushButton* OfflineButton = new MyPushButton(":/Image/offline_button.png");
@@ -65,6 +66,6 @@ void MainScene::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
     QPainter painter(this); //定义画家
     QPixmap background;
-    background.load(":/Image/main_background.png");
-    painter.drawPixmap(this->rect(),background);
+    background.load(":/Image/mainscene_bg.png");
+    painter.drawPixmap(0,0,this->width(),this->height(),background);
 }

@@ -13,5 +13,8 @@
         <file>Image/start_button.png</file>
         <file>Image/return_button2.png</file>
         <file>Image/clockPic.png</file>
+        <file>Image/clockPic.gif</file>
+        <file>Image/icon.png</file>
+        <file>Image/mainscene_bg.png</file>
     </qresource>
 </RCC>

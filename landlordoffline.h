@@ -6,6 +6,7 @@
 #define LANDLORDOFFLINE_H
 
 #include <QMainWindow>
+#include "clock.h"
 #include "handcards.h"
 #include "cardpicture.h"
 class LandlordOffline : public QMainWindow

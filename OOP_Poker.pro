@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     card.cpp \
+    card_ddz.cpp \
     cardpicture.cpp \
     choosegame.cpp \
     clock.cpp \
@@ -29,6 +30,7 @@ SOURCES += \
 
 HEADERS += \
     card.h \
+    card_ddz.h \
     cardpicture.h \
     choosegame.h \
     clock.h \

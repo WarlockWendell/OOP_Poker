@@ -87,7 +87,7 @@ void LandlordOffline::StartGame()
     {
         Card c(cardNum[j]);
         QPropertyAnimation * Animation = new QPropertyAnimation(cardpictures[j],"geometry");
-        Animation->setDuration(100);
+        Animation->setDuration(10);
         Animation->setStartValue(cardpictures[j]->geometry());
         QEventLoop loop;
         if(StartSeat%4 == Right)
@@ -162,6 +162,9 @@ void LandlordOffline::MainGame()
 {
     AddBottomCards(Self);
     PaintHandCards(*selfCards);
+    Clock* clk = new Clock(10,Self,this);
+    clk->StartClock();
+    //clk->show();
 }
 
 //绘制手牌区手牌
