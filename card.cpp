@@ -32,24 +32,24 @@ Card::Card(const Card& c) : Value(c.Value),Suit(c.Suit)
 }
 
 //设置牌值，应该用不到
-void Card::SetValue(CardValue v)
+void Card::SetValue(const CardValue &v)
 {
     Value = v;
 }
 //设置花色，应该也用不到
-void Card::SetSuit(CardSuit s)
+void Card::SetSuit(const CardSuit &s)
 {
     Suit = s;
 }
 
 //取牌值
-CardValue Card::GetValue()
+CardValue Card::GetValue()const
 {
     return Value;
 }
 
 //取花色
-CardSuit Card::GetSuit()
+CardSuit Card::GetSuit()const
 {
     return Suit;
 }
