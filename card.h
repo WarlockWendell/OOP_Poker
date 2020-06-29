@@ -44,10 +44,10 @@ public:
     Card(CardValue v = Card_Begin, CardSuit s = Suit_Begin); //按照牌值和花色构造
     Card(int Number); //按照序号构造，1-13方片3-A, 14-26 梅花3-A, 27-39 红桃3-A, 40-52黑桃3-A,53\54小\大王
     Card(const Card& c); //拷贝构造函数
-    void SetValue(CardValue v); //设置点数
-    void SetSuit(CardSuit s);  //设置花色
-    CardValue GetValue();   //获取点数
-    CardSuit GetSuit();     //获取花色
+    void SetValue(const CardValue &v); //设置点数
+    void SetSuit(const CardSuit &s);  //设置花色
+    CardValue GetValue()const;   //获取点数
+    CardSuit GetSuit()const;     //获取花色
 protected:
     CardValue Value;  //点数
     CardSuit Suit;  //花色
