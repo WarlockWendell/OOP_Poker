@@ -15,12 +15,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    blackjackoffline.cpp \
+    blackjackofflinedesk.cpp \
     card.cpp \
     card_ddz.cpp \
     cardpicture.cpp \
     choosegame.cpp \
     clock.cpp \
     handcards.cpp \
+    handcards_blackjack.cpp \
     landlordoffline.cpp \
     landlordofflinedesk.cpp \
     main.cpp \
@@ -29,12 +32,15 @@ SOURCES += \
     shuffle.cpp
 
 HEADERS += \
+    blackjackoffline.h \
+    blackjackofflinedesk.h \
     card.h \
     card_ddz.h \
     cardpicture.h \
     choosegame.h \
     clock.h \
     handcards.h \
+    handcards_blackjack.h \
     landlordoffline.h \
     landlordofflinedesk.h \
     mainscene.h \
