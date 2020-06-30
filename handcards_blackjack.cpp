@@ -223,7 +223,7 @@ bool HandCardsBlackjack::operator> (const HandCardsBlackjack &Cards) const
     return (this->Compare(Cards) == 1);
 }
 
-bool HandCardsBlackjack::operator> (const HandCardsBlackjack &Cards) const
+bool HandCardsBlackjack::operator== (const HandCardsBlackjack &Cards) const
 {
     return (this->Compare(Cards) == 0);
 }

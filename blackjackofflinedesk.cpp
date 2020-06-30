@@ -28,7 +28,7 @@ BlackjackOfflineDesk::BlackjackOfflineDesk(QWidget *parent) : QWidget(parent)
         this->close();
         blackjackoffline->InitGame();
         blackjackoffline->show();
-        blackjackoffline->StartGame();
+        blackjackoffline->NewGame();
         blackjackoffline->MainGame();
     });
     connect(ReturnButton, &MyPushButton::MousePress, [=](){

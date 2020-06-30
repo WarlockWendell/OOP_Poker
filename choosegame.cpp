@@ -43,7 +43,17 @@ ChooseGame::ChooseGame(int gameType,QWidget* parent):QWidget(parent),GameType(ga
         });
         connect(BlackJackButton,&MyPushButton::MousePress,[=](){
             qDebug()<<"press offline blackjack";
-
+            BlackjackOfflineDesk *test_desk = new BlackjackOfflineDesk();
+            QTimer::singleShot(200,this,[=](){
+                this->close();
+                test_desk->setGeometry(this->geometry());
+                test_desk->show();
+            });
+            connect(test_desk,&BlackjackOfflineDesk::ReturnSignal,[=](){
+                test_desk->close();
+                this->setGeometry(test_desk->geometry());
+                this->show();
+            }) ;
 
 
 

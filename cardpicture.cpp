@@ -17,6 +17,21 @@ CardPicture::CardPicture(const Card& c ,Seat se, bool isshow,QWidget *parent) : 
            CardPicFront = CardPicAll.copy(80,420,80,105); //大王
     CardPicBack = CardPicAll.copy(160,420,80,105); //背面
 }
+
+CardPicture::CardPicture(const Card& c, Seat se, bool isshow, bool needrotate, QWidget* parent) : QWidget(parent),card(c),seat(se),NeedRotate(needrotate), IsShow(isshow)
+{
+    QPixmap CardPicAll(":/Image/card.png"); //所有的扑克牌的图片
+    int v = (int)card.GetValue();
+    int s = (int)card.GetSuit();
+    if(v>=1&&v<=13)
+        CardPicFront= CardPicAll.copy((v-1)*80,(4-s)*105,80,105); //取出对应的一张牌
+    else if(v == 53)
+           CardPicFront = CardPicAll.copy(0,420,80,105);  //小王
+    else if(v == 54)
+           CardPicFront = CardPicAll.copy(80,420,80,105); //大王
+    CardPicBack = CardPicAll.copy(160,420,80,105); //背面
+}
+
 void CardPicture::SetCard(Card c)
 {
     card = c;
@@ -70,7 +85,7 @@ void CardPicture::paintEvent(QPaintEvent *event)
     }
     else
     {
-        if(seat != Self && seat != Central) //不是自家，需要旋转；如果牌是显示状态的，比如明牌、斗地主的底牌等都不需要进行旋转，是背面时如果是别家的就需要旋转
+        if(seat != Self && seat != Central && NeedRotate) //不是自家，需要旋转；如果牌是显示状态的，比如明牌、斗地主的底牌等都不需要进行旋转，是背面时如果是别家的就需要旋转
         {
             //qDebug()<<seat;
             QMatrix matrix ; //旋转矩阵

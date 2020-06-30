@@ -21,6 +21,7 @@ class CardPicture : public QWidget
     Q_OBJECT
     Card card;  //牌
     Seat seat = Self; //表示上家、下家与对家
+    bool NeedRotate = true; // 是否需要旋转(21点的牌均不需旋转)
     bool IsShow = true; //是否展示牌，选否表示展示背面
     bool IsRotate = false; //是否已经旋转过了
     bool AllowClick = false; //这张牌是否可以点击
@@ -29,6 +30,7 @@ class CardPicture : public QWidget
     QPixmap CardPicBack;  //牌的反面
 public:
     CardPicture(const Card& c, Seat s, bool isshow, QWidget* parent = nullptr);
+    CardPicture(const Card& c, Seat s, bool isshow, bool needrotate, QWidget* parent = nullptr);
     void SetCard(Card c);
     void SetSeat(Seat seat);
     void SetShow(bool s);
