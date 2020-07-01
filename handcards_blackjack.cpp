@@ -132,7 +132,21 @@ int HandCardsBlackjack::Compare (const HandCardsBlackjack &Cards) const
     // 比较两副手牌哪一个更“大”，从而得到得分。
     // 21 点游戏基于手牌的“大小”进行胜负的判断。
     int result = 0;
-    if (this->IsHit())
+    if (this->IsBlackjack())
+    {
+        // 为黑杰克的情况
+        if (Cards.IsBlackjack())
+        {
+            // 同为黑杰克，平局
+            result = 0;
+        }
+        else
+        {
+            // 有黑杰克的胜利。黑杰克得分为1.5倍。
+            result = 3;
+        }
+    }
+    else if (this->IsHit())
     {
         // 爆牌的情况
         if (Cards.IsHit())
@@ -150,20 +164,6 @@ int HandCardsBlackjack::Compare (const HandCardsBlackjack &Cards) const
     {
         // 对面爆牌的情况，此时这边没有爆牌，必赢。
         result = 2;
-    }
-    else if (this->IsBlackjack())
-    {
-        // 为黑杰克的情况
-        if (Cards.IsBlackjack())
-        {
-            // 同为黑杰克，平局
-            result = 0;
-        }
-        else
-        {
-            // 有黑杰克的胜利。黑杰克得分为1.5倍。
-            result = 3;
-        }
     }
     else if (Cards.IsBlackjack())
     {
