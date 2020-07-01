@@ -25,25 +25,20 @@ int HandCardsBlackjack::GetPoint() const
     {
         // 对每一副牌进行遍历。
         const int value = handcard->GetCard().GetValue();
-        if (value >= 1 && value <= 8)
+        if (value >= 1 && value <= 10)
         {
             // 数字牌的点数为其牌面数值。
-            point += value + 2;
-        }
-        else if (value >= 9 && value <= 11)
-        {
-            // JQK 的点数为 10.
-            point += 10;
-        }
-        else if (value >= 12 && value <= 13)
-        {
-            // A、2点数为1、2
-            point += value - 11;
-            if (value == 12)
+            point += value;
+            if (value == 1)
             {
                 // A 同时可以当做 1 和 11.
                 pointvar += 10;
             }
+        }
+        else if (value >= 11 && value <= 13)
+        {
+            // JQK 的点数为 10.
+            point += 10;
         }
     }
     while (point <= 11 && pointvar >= 10)
@@ -73,7 +68,7 @@ bool HandCardsBlackjack::IsBlackjack() const
     for (CardPicture *handcard : handcards)
     {
         const int value = handcard->GetCard().GetValue();
-        if (value == 12)
+        if (value == 1)
         {
             // A。
             if (hasA)
@@ -86,7 +81,7 @@ bool HandCardsBlackjack::IsBlackjack() const
                 hasA = true;
             }
         }
-        else if (value >= 8 && value <= 11)
+        else if (value >= 11 && value <= 13)
         {
             // 10。
             if (has10)
@@ -108,37 +103,53 @@ bool HandCardsBlackjack::IsBlackjack() const
     return true;
 }
 
+QString HandCardsBlackjack::GetAttr() const
+{
+    QString result;
+    if (this->IsHit())
+    {
+        result.append("爆牌");
+    }
+    else if (this->IsBlackjack())
+    {
+        result.append("黑杰克！");
+    }
+    else if (!this->IsHit() && handcards.size() >= 5)
+    {
+        result.append("五小！");
+    }
+    else
+    {
+        QString point = QString::number(this->GetPoint());
+        result.append(point);
+        result.append(" 点");
+    }
+    return result;
+}
+
 int HandCardsBlackjack::Compare (const HandCardsBlackjack &Cards) const
 {
-    // 比较两副手牌哪一个更“大”。
+    // 比较两副手牌哪一个更“大”，从而得到得分。
     // 21 点游戏基于手牌的“大小”进行胜负的判断。
     int result = 0;
-    // 1 为本牌更大，0 为平局，-1 为本牌更小。
     if (this->IsHit())
     {
         // 爆牌的情况
         if (Cards.IsHit())
         {
             // 同样是爆牌时，庄家获胜。且一定是闲家与庄家比较。
-            if (Cards.isLord)
-            {
-                result = -1;
-            }
-            else
-            {
-                result = 1;
-            }
+            result = -2;
         }
         else
         {
             // 否则，不爆牌的一方获胜
-            result = -1;
+            result = -2;
         }
     }
     else if (Cards.IsHit())
     {
         // 对面爆牌的情况，此时这边没有爆牌，必赢。
-        result = 1;
+        result = 2;
     }
     else if (this->IsBlackjack())
     {
@@ -150,14 +161,14 @@ int HandCardsBlackjack::Compare (const HandCardsBlackjack &Cards) const
         }
         else
         {
-            // 有黑杰克的胜利。
-            result = 1;
+            // 有黑杰克的胜利。黑杰克得分为1.5倍。
+            result = 3;
         }
     }
     else if (Cards.IsBlackjack())
     {
         // 对面为黑杰克的情况，此时这边不是黑杰克，必输。
-        result = -1;
+        result = -2;
     }
     else if (!this->IsHit() && handcards.size() >= 5)
     {
@@ -169,13 +180,13 @@ int HandCardsBlackjack::Compare (const HandCardsBlackjack &Cards) const
         }
         else
         {
-            result = 1;
+            result = 2;
         }
     }
     else if (!Cards.IsHit() && Cards.handcards.size() >= 5)
     {
         // 对面“五小”，必输。
-        result = -1;
+        result = -2;
     }
     else
     {
@@ -183,12 +194,12 @@ int HandCardsBlackjack::Compare (const HandCardsBlackjack &Cards) const
         if (this->GetPoint() < Cards.GetPoint())
         {
             // 自己这边小，输了。
-            result = -1;
+            result = -2;
         }
         else if (this->GetPoint() > Cards.GetPoint())
         {
             // 自己这边大，赢了。
-            result = 1;
+            result = 2;
         }
         else
         {
@@ -196,12 +207,12 @@ int HandCardsBlackjack::Compare (const HandCardsBlackjack &Cards) const
             if (this->handcards.size() < Cards.handcards.size())
             {
                 // 自己牌较少，因此输了。
-                result = -1;
+                result = -2;
             }
             else if (this->handcards.size() > Cards.handcards.size())
             {
                 // 自己牌多，赢了
-                result = 1;
+                result = 2;
             }
             else
             {
@@ -212,18 +223,18 @@ int HandCardsBlackjack::Compare (const HandCardsBlackjack &Cards) const
     }
     return result;
 }
-
+/*
 bool HandCardsBlackjack::operator< (const HandCardsBlackjack &Cards) const
 {
-    return (this->Compare(Cards) == -1);
+    return (this->Compare(Cards) < 0);
 }
 
 bool HandCardsBlackjack::operator> (const HandCardsBlackjack &Cards) const
 {
-    return (this->Compare(Cards) == 1);
+    return (this->Compare(Cards) > 0);
 }
 
 bool HandCardsBlackjack::operator== (const HandCardsBlackjack &Cards) const
 {
     return (this->Compare(Cards) == 0);
-}
+}*/

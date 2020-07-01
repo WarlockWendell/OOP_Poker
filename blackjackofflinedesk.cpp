@@ -29,7 +29,38 @@ BlackjackOfflineDesk::BlackjackOfflineDesk(QWidget *parent) : QWidget(parent)
         blackjackoffline->InitGame();
         blackjackoffline->show();
         blackjackoffline->NewGame();
-        blackjackoffline->MainGame();
+        bool playing = true;    // 多局游玩
+        while (playing)
+        {
+            blackjackoffline->MainGame();
+            // 游戏结束后弹出结束和继续按钮。
+            MyPushButton* endButton = new MyPushButton(":/Image/end_game_button.png");
+            endButton->setParent(blackjackoffline);
+            endButton->move(blackjackoffline->width()*0.5 + 70 - endButton->width()/2, blackjackoffline->height() - 50);
+            endButton->show();
+            MyPushButton* nextButton = new MyPushButton(":/Image/next_game_button.png");
+            nextButton->setParent(blackjackoffline);
+            nextButton->move(blackjackoffline->width()*0.5 - 70 - nextButton->width()/2, blackjackoffline->height() - 50);
+            nextButton->show();
+            QEventLoop loop2;
+                connect(endButton, &MyPushButton::MousePress, [&](){
+                    playing = false;
+                    loop2.exit();
+                    emit ReturnSignal();
+                    blackjackoffline->ExitGame();
+                    blackjackoffline->close();
+                });
+                connect(nextButton, &MyPushButton::MousePress, [&](){
+                    loop2.exit();
+                });
+            loop2.exec();
+            delete endButton;
+            delete nextButton;
+            if (playing)
+            {
+                blackjackoffline->NextGame();
+            }
+        }
     });
     connect(ReturnButton, &MyPushButton::MousePress, [=](){
         emit ReturnSignal();

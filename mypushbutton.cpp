@@ -10,6 +10,15 @@ MyPushButton::MyPushButton(QString normalPic, QString pressPic):NormalPic(normal
     this->setIconSize(QSize(pix.width(),pix.height()));
 }
 
+void MyPushButton::AlterPicture(QString pic)
+{
+    QPixmap pix;
+    pix.load(pic);
+    this->setFixedSize(pix.width(),pix.height());
+    this->setStyleSheet("QPushButton{border:0px}");
+    this->setIcon(pix);
+    this->setIconSize(QSize(pix.width(),pix.height()));
+}
 
 void MyPushButton::mousePressEvent(QMouseEvent *event)
 {

@@ -18,6 +18,7 @@ class MyPushButton : public QPushButton
 
 public:
     MyPushButton(QString normalPic, QString pressPic = "");
+    void AlterPicture(QString pic);
     void mousePressEvent(QMouseEvent* event);
     void mouseReleaseEvent(QMouseEvent* event);
 
