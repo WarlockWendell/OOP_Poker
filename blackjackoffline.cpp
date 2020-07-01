@@ -21,8 +21,7 @@ BlackjackOffline::BlackjackOffline(QWidget *parent) : QMainWindow(parent)
 
 void BlackjackOffline::InitGame()
 {
-    qDebug()<<"init game";
-    //todo: initialize
+    // 这个是从斗地主那复制粘贴过来的，似乎是多余的，但是不敢删_(:3JL)_
 }
 
 void BlackjackOffline::paintEvent(QPaintEvent *event)
@@ -446,7 +445,6 @@ void BlackjackOffline::MainGame()
                 PaintHandCards(*selfCards);
                 if (selfCards->GetPoint() > 21)
                 {
-                    qDebug() << "EXPLODED!";
                     // 如果爆牌则无法继续抽牌。
                     DisabledButton->AlterPicture(":/Image/card_hit_button.png");
                     DrawButton->hide();

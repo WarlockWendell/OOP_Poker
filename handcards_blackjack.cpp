@@ -168,7 +168,7 @@ int HandCardsBlackjack::Compare (const HandCardsBlackjack &Cards) const
     else if (Cards.IsBlackjack())
     {
         // 对面为黑杰克的情况，此时这边不是黑杰克，必输。
-        result = -2;
+        result = -3;
     }
     else if (!this->IsHit() && handcards.size() >= 5)
     {
