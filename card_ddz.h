@@ -5,24 +5,25 @@
 
 enum HandType_DDZ
 {
-    Hand_Unknown, //未知
-    Hand_Pass, //不出
-    Hand_Single, //单
-    Hand_Seq_Single, //顺子
-    Hand_Pair, //对
-    Hand_Seq_Pair, //连对
-    Hnad_Triple, //三张
-    Hand_Plane, //三顺，555666/555666777
-    Hand_Triple_Pair, //三带二
-    Hand_Plane_Pair, //飞机带翅膀
-    Hand_Bomb, //炸弹
-    Hand_Bomb_Joker //王炸
+    Unknown, //未知
+    Pass, //不出
+    Single, //单
+    SeqSingle, //顺子
+    Pair, //对
+    SeqPair, //连对
+    Triple, //三张
+    Plane, //三顺，555666/555666777
+    TriplePair, //三带二
+    PlanePair, //飞机带翅膀
+    Bomb, //炸弹
+    BombJoker //王炸
 };
 
 //斗地主的单张牌类
 class CardDdz : public Card
 {
 public:
+    CardDdz(){}
     CardDdz(int Number):Card(Number){}
     //比较大小，操作符重载
     bool operator > (const CardDdz& card)const;
