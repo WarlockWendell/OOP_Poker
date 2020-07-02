@@ -213,3 +213,95 @@ int CardGroup::priority(HandType_DDZ type){
     default: return 3;
     }
 }
+
+//牌型代表的点数
+int CardGroup::representPoint(HandType_DDZ type){
+    switch (type) {
+    case HandType_DDZ::Pass: //过
+        return CardValue::Card_Begin;
+    case HandType_DDZ::Single: //单
+        return m_cardset[0].GetValue();
+    case HandType_DDZ::SeqSingle: //顺子
+    {
+        std::sort(m_cardset.begin(),m_cardset.end());//升序排序
+        unsigned int N=m_cardset.size();
+        if(m_cardset[0].GetValue()==CardValue::Card_A){ //如果最大牌是A
+            return 14;
+        }
+        else return m_cardset[N-1].GetValue();
+    }
+    case HandType_DDZ::Pair: //对子
+        return m_cardset[0].GetValue();
+    case HandType_DDZ::SeqPair: //连对
+    {
+        std::sort(m_cardset.begin(),m_cardset.end());//升序排序
+        unsigned int N=m_cardset.size();
+        if(m_cardset[0].GetValue()==CardValue::Card_A){
+            return 14;
+        }
+        else return m_cardset[N-1].GetValue();
+    }
+    case HandType_DDZ::Triple: //三
+        return m_cardset[0].GetValue();
+    case HandType_DDZ::TriplePair: //三带二
+    {
+         std::sort(m_cardset.begin(),m_cardset.end());//升序排序
+         if(m_cardset[2]==m_cardset[3]){ //如果后三张是"三"
+             return m_cardset[2].GetValue();
+         }else return m_cardset[0].GetValue();
+    }
+    case HandType_DDZ::Plane: //飞机
+    {
+        std::sort(m_cardset.begin(),m_cardset.end());//升序排序
+        unsigned int N=m_cardset.size();
+        if(m_cardset[0].GetValue()==CardValue::Card_A){
+            return 14;
+        }else
+            return m_cardset[N-1].GetValue();
+    }
+    case HandType_DDZ::PlanePair: //飞机带翅膀
+    {
+        unsigned int cnt[54]={0};
+        unsigned int N=m_cardset.size();
+        for(unsigned int i=0;i<N;i++){
+            cnt[m_cardset[i].GetValue()]++;
+        }
+        CardGroup cg;
+        for(unsigned int i=0;i<N;i++){
+            if(cnt[m_cardset[i].GetValue()]==3){
+                cg.addOne(m_cardset[i]);
+            }
+        }
+        return cg.representPoint(HandType_DDZ::Plane);
+    }
+    case HandType_DDZ::Bomb: //炸弹
+        return m_cardset[0].GetValue();
+    case HandType_DDZ::BombJoker: //王炸
+        return 53;
+    }
+    return CardValue::Card_Begin;
+}
+
+//比较两个牌型，返回比较结果
+CardGroup::CompareResult CardGroup::compareTo(CardGroup &comgroup){
+    HandType_DDZ thisType=getHandType();
+    HandType_DDZ comType=comgroup.getHandType();
+    int thisPriority=priority(thisType);
+    int comPriority=priority(comType);
+    //返回比较结果
+    if(thisPriority>comPriority) //优先级大
+        return CompareResult::Larger;
+    else if(thisPriority<comPriority) //优先级小
+        return CompareResult::Smaller;
+    else if(thisPriority==comPriority){ //优先级相同
+        int thisValue = representPoint(thisType);
+        int comValue = comgroup.representPoint(comType);
+        if(thisValue>comValue) //点数大
+            return CompareResult::Larger;
+        if(thisValue<comValue) //点数小
+            return CompareResult::Smaller;
+        return CompareResult::Equal; //点数也一样
+    }
+    return CompareResult::NotMatch; //无法比较
+}
+
