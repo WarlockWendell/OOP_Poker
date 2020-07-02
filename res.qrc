@@ -25,5 +25,8 @@
         <file>Image/end_game_button.png</file>
         <file>Image/next_game_button.png</file>
         <file>Image/button.png</file>
+        <file>Image/bei.png</file>
+        <file>Image/bg.jpg</file>
+        <file>Image/blackjack_table.png</file>
     </qresource>
 </RCC>
