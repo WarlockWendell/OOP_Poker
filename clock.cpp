@@ -88,3 +88,8 @@ void Clock::timerout()
     label->setText(QString::number(time));
     time--;
 }
+void Clock::StopClock()
+{
+    timer->stop();
+    close();
+}

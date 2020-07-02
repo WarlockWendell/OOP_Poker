@@ -9,6 +9,7 @@
 #include <QEventLoop>
 #include <QThread>
 #include <ctime>
+#include "calllandlord.h"
 LandlordOffline::LandlordOffline(QWidget *parent) : QMainWindow(parent)
 {
     setFixedSize(1200,800);
@@ -160,10 +161,7 @@ void LandlordOffline::StartGame()
 //主游戏逻辑
 void LandlordOffline::MainGame()
 {
-    AddBottomCards(Self);
-    PaintHandCards(*selfCards);
-    Clock* clk = new Clock(10,Self,this);
-    clk->StartClock();
+    CallLandlord(*this);
     //clk->show();
 }
 

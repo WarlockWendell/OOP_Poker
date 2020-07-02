@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     blackjackoffline.cpp \
     blackjackofflinedesk.cpp \
+    calllandlord.cpp \
     card.cpp \
     card_ddz.cpp \
     cardpicture.cpp \
@@ -34,6 +35,7 @@ SOURCES += \
 HEADERS += \
     blackjackoffline.h \
     blackjackofflinedesk.h \
+    calllandlord.h \
     card.h \
     card_ddz.h \
     cardpicture.h \

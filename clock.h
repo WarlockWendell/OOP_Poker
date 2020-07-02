@@ -27,7 +27,8 @@ signals:
     void TimeOut();
     void LeftFive();
 public slots:
-       void timerout();
+    void timerout();
+    void StopClock();
 };
 
 #endif // CLOCK_H

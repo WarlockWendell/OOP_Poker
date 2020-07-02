@@ -24,5 +24,6 @@
         <file>Image/nonlord_icon.png</file>
         <file>Image/end_game_button.png</file>
         <file>Image/next_game_button.png</file>
+        <file>Image/button.png</file>
     </qresource>
 </RCC>
