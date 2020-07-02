@@ -19,6 +19,7 @@ enum Seat{
 class CardPicture : public QWidget
 {
     Q_OBJECT
+    int type = 1;//牌的类型，21点用的牌卡背和斗地主不一样，21点用的type=2
     Card card;  //牌
     Seat seat = Self; //表示上家、下家与对家
     bool NeedRotate = true; // 是否需要旋转(21点的牌均不需旋转)
@@ -31,6 +32,7 @@ class CardPicture : public QWidget
 public:
     CardPicture(const Card& c, Seat s, bool isshow, QWidget* parent = nullptr);
     CardPicture(const Card& c, Seat s, bool isshow, bool needrotate, QWidget* parent = nullptr);
+    CardPicture(const Card& c, Seat s, bool isshow, bool needrotate, int type, QWidget* parent = nullptr);//在21点游戏里，传入type=2定制了不一样的卡背
     void SetCard(Card c);
     void SetSeat(Seat seat);
     void SetShow(bool s);

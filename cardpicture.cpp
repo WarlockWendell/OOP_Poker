@@ -4,6 +4,7 @@
 #include <QMatrix>
 
 //构造函数，构造牌的一些基本信息，显示与否，显示的角度，生成牌的正反面图片
+
 CardPicture::CardPicture(const Card& c ,Seat se, bool isshow,QWidget *parent) : QWidget(parent),card(c),seat(se),IsShow(isshow)
 {
     QPixmap CardPicAll(":/Image/card.png"); //所有的扑克牌的图片
@@ -30,6 +31,26 @@ CardPicture::CardPicture(const Card& c, Seat se, bool isshow, bool needrotate, Q
     else if(v == 54)
            CardPicFront = CardPicAll.copy(80,420,80,105); //大王
     CardPicBack = CardPicAll.copy(160,420,80,105); //背面
+}
+CardPicture::CardPicture(const Card& c, Seat se, bool isshow, bool needrotate, int type, QWidget* parent) : QWidget(parent),card(c),seat(se),NeedRotate(needrotate),type(type), IsShow(isshow)
+{
+    QPixmap CardPicAll(":/Image/card.png"); //所有的扑克牌的图片
+    int v = (int)card.GetValue();
+    int s = (int)card.GetSuit();
+    if(v>=1&&v<=13)
+        CardPicFront= CardPicAll.copy((v-1)*80,(4-s)*105,80,105); //取出对应的一张牌
+    else if(v == 53)
+           CardPicFront = CardPicAll.copy(0,420,80,105);  //小王
+    else if(v == 54)
+           CardPicFront = CardPicAll.copy(80,420,80,105); //大王
+    if(type==1)
+    {
+      CardPicBack = CardPicAll.copy(160,420,80,105); //背面
+    }
+    else
+    {
+      CardPicBack.load(":/Image/bei.png");
+    }
 }
 
 void CardPicture::SetCard(Card c)
