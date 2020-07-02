@@ -30,7 +30,7 @@ void BlackjackOffline::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
     QPixmap pix;
     QPixmap toDraw;
-    pix.load(":/Image/desk_background.png");
+    pix.load(":/Image/blackjack_table.png");
     QPainter painter(this);
     painter.drawPixmap(this->rect(),pix);
     // 绘制玩家图标
@@ -161,7 +161,7 @@ void BlackjackOffline::StartGame()
     for (int i=0; i<52; i++)
     {
         Card c(cardNum.at(i));
-        CardPicture *cardPic = new CardPicture(c,Seat::Central,false,false,this);
+        CardPicture *cardPic = new CardPicture(c,Seat::Central,false,false,2,this);
         cardPic->setFixedSize(80,105);
         cardPic->setGeometry(this->width()*0.5 - cardPic->width()*0.5,this->height()*0.5-cardPic->width()*0.5,cardPic->width(),cardPic->height());
         cardPic->show();
