@@ -25,8 +25,6 @@ public:
     void addOne(const CardDdz &card_ddz); //添加一张牌至牌组
     //HandType_DDZ getHandType(); //获得牌组的类型
     static int priority(HandType_DDZ type); //计算优先级，属于整个类的静态成员函数
-    
-    //待完善
     CompareResult compareTo(CardGroup &combine); //比较两个牌型，返回比较结果
     CardValue representPoint(HandType_DDZ type); //牌型代表的点数
    
