@@ -25,5 +25,6 @@
         <file>Image/end_game_button.png</file>
         <file>Image/next_game_button.png</file>
         <file>Image/button.png</file>
+        <file>Image/landlord_image.png</file>
     </qresource>
 </RCC>
