@@ -18,10 +18,10 @@ BlackjackOfflineDesk::BlackjackOfflineDesk(QWidget *parent) : QWidget(parent)
     // 进行窗口布局。这里参考了斗地主部分的代码。
     MyPushButton* startButton = new MyPushButton(":/Image/start_button.png");
     startButton->setParent(this);
-    startButton->move(this->width()*0.5-startButton->width()*0.5, this->height()*0.3);
+    startButton->move(this->width()*0.9-startButton->width()*0.9, this->height()*0.65);
     MyPushButton* ReturnButton = new MyPushButton(":/Image/return_button2.png");
     ReturnButton->setParent(this);
-    ReturnButton->move(this->width()*0.5-ReturnButton->width()*0.5, this->height()*0.6);
+    ReturnButton->move(this->width()*0.9-ReturnButton->width()*0.9, this->height()*0.8);
     connect(startButton, &MyPushButton::MousePress, [&]()
     {
         blackjackoffline->setGeometry(this->geometry());
@@ -71,7 +71,7 @@ void BlackjackOfflineDesk::paintEvent(QPaintEvent *event)
 {
     QWidget::paintEvent(event);
     QPixmap pix;
-    pix.load(":/Image/desk_background.png");
+    pix.load(":/Image/bg.jpg");
     QPainter painter(this);
     painter.drawPixmap(this->rect(),pix);
 }
