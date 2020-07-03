@@ -195,18 +195,69 @@ bool CardGroup::isBombJoker()const{
 
 //获得牌组的类型
 HandType_DDZ CardGroup::getHandType(){
-    if(isPass()) return HandType_DDZ::Pass;  //过
-    if(isSingle()) return HandType_DDZ::Single; //单
-    if(isSeqSingle(true)) return HandType_DDZ::SeqSingle; //顺子
-    if(isPair()) return HandType_DDZ::Pair; //对
-    if(isSeqPair()) return HandType_DDZ::SeqPair; //连对
-    if(isTriple()) return HandType_DDZ::Triple; //三张
-    if(isPlane()) return HandType_DDZ::Plane; //三顺
-    if(isTriplePair()) return HandType_DDZ::TriplePair; //三带二
-    if(isPlanePair()) return HandType_DDZ::PlanePair; //飞机带翅膀
-    if(isBomb()) return HandType_DDZ::Bomb; //炸弹
-    if(isBombJoker()) return HandType_DDZ::BombJoker; //王炸
-    return HandType_DDZ::Unknown;//未知
+    if(isPass()){
+        m_cardgrouptype = HandType_DDZ::Pass;  //过
+        return HandType_DDZ::Pass;
+    }
+    else if(isSingle()){
+        m_cardgrouptype = HandType_DDZ::Single; //单
+        return HandType_DDZ::Single;
+    }
+    else if(isSeqSingle(true)){
+        m_cardgrouptype = HandType_DDZ::SeqSingle; //顺子
+        return HandType_DDZ::SeqSingle;
+    }
+    else if(isPair()){
+        m_cardgrouptype = HandType_DDZ::Pair; //对
+        return HandType_DDZ::Pair;
+    }
+    else if(isSeqPair()){
+        m_cardgrouptype = HandType_DDZ::SeqPair; //连对
+        return HandType_DDZ::SeqPair;
+    }
+    else if(isTriple()){
+        m_cardgrouptype = HandType_DDZ::Triple; //三张
+        return HandType_DDZ::Triple;
+    }
+    else if(isPlane()){
+        m_cardgrouptype = HandType_DDZ::Plane; //三顺
+        return HandType_DDZ::Plane;
+    }
+    else if(isTriplePair()){
+        m_cardgrouptype = HandType_DDZ::TriplePair; //三带二
+        return HandType_DDZ::TriplePair;
+    }
+    else if(isPlanePair()){
+       m_cardgrouptype = HandType_DDZ::PlanePair; //飞机带翅膀
+        return HandType_DDZ::PlanePair;
+    }
+    else if(isBomb()){
+        m_cardgrouptype = HandType_DDZ::Bomb; //炸弹
+        return HandType_DDZ::Bomb;
+    }
+    else if(isBombJoker()){
+       m_cardgrouptype = HandType_DDZ::BombJoker; //王炸
+        return HandType_DDZ::BombJoker;
+    }
+    else{
+        m_cardgrouptype = HandType_DDZ::Unknown;//未知
+        return HandType_DDZ::Unknown;
+    }
+}
+
+//设置牌组的类型
+void CardGroup::setHandType(HandType_DDZ type){
+    m_cardgrouptype = type;
+}
+
+//获得牌组张数
+int CardGroup::getGroupCount()const{
+    return m_cardset.size();
+}
+
+//设置张数
+void CardGroup::setGroupCount(int cnt){
+    m_count = cnt;
 }
 
 //计算优先级
@@ -315,6 +366,11 @@ int CardGroup::representPoint(HandType_DDZ type){
         return 53;
     }
     return CardValue::Card_Begin;
+}
+
+//设置牌组的价值
+void CardGroup::setGroupValue(int value){
+    m_value = value;
 }
 
 //比较两个牌型，返回比较结果
