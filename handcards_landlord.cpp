@@ -24,3 +24,10 @@ std::vector<CardPicture*> HandCardsLandlord::PutCard(std::vector<CardDdz> a) //�
     }
     return Cards;
 }
+
+//清空要打出去的牌组
+void HandCardsLandlord::ClearPutCardList(){
+    putCardGroup.setHandType(HandType_DDZ::Unknown);
+    putCardGroup.setGroupCount(0);
+    putCardGroup.setGroupValue(0);
+}
