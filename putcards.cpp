@@ -238,9 +238,9 @@ void PutLeft(LandlordOffline& l)
              for(int i=0; i<(int)cards.size();i++)
              {
                  int size = cards.size();
-                 cards[i]->setFixedSize(80,105);
+                 cards[i]->setFixedSize(60,79);
                  cards[i]->move(l.width()*0.5-cards[i]->width()*0.5-400,l.height()/2 - cards[i]->height()/2);
-                 cards[i]->move(l.width()*0.5 + (i-size/2-2)*cards[i]->width()/4,cards[i]->y());
+                 cards[i]->move(cards[i]->x(),l.height()*0.5 + (i-size/2-2)*cards[i]->width()/5);
                  cards[i]->setParent(&l);
                  cards[i]->show();
                  QObject::connect(&l,&LandlordOffline::LeftPut,cards[i],&CardPicture::close);
@@ -248,7 +248,8 @@ void PutLeft(LandlordOffline& l)
              if(l.leftCards->GetCards().size() == 0) //出完了
              {
                 l.isWin = true;
-                l.gameover = true;
+                if(l.landlord != Seat::Left)
+                    l.gameover = true;
                 emit l.Over();
              }
              l.PaintHandCards(*l.leftCards);
@@ -303,20 +304,21 @@ void PutRight(LandlordOffline& l)
               for(int i=0; i<(int)cards.size();i++)
               {
                   int size = cards.size();
-                  cards[i]->setFixedSize(80,105);
+                  cards[i]->setFixedSize(60,79);
                   cards[i]->move(l.width()*0.5-cards[i]->width()*0.5+400,l.height()/2-cards[i]->height()/2);
-                  cards[i]->move(l.width()*0.5 + (i-size/2-2)*cards[i]->width()/4,cards[i]->y());
+                  cards[i]->move(cards[i]->x(),l.height()*0.5 + (i-size/2-2)*cards[i]->width()/5);
                   cards[i]->setParent(&l);
                   cards[i]->show();
-                  QObject::connect(&l,&LandlordOffline::LeftPut,cards[i],&CardPicture::close);
+                  QObject::connect(&l,&LandlordOffline::RightPut,cards[i],&CardPicture::close);
               }
-              if(l.leftCards->GetCards().size() == 0) //出完了
+              if(l.rightCards->GetCards().size() == 0) //出完了
               {
                  l.isWin = true;
-                 l.gameover = true;
+                 if(l.landlord != Seat::Right)
+                    l.gameover = true;
                  emit l.Over();
               }
-              l.PaintHandCards(*l.leftCards);
+              l.PaintHandCards(*l.rightCards);
               PutOpposite(l);
          }
     });
@@ -345,6 +347,44 @@ void PutOpposite(LandlordOffline& l)
             notPutLabel->show();
             QObject::connect(&l,&LandlordOffline::OppositePut,notPutLabel,&QLabel::close);
             PutLeft(l);
+        }
+        else
+     {
+         CardGroup a;
+         std::vector<CardDdz> temp;
+         Card card = l.oppositeCards->GetCards().at(l.oppositeCards->GetCards().size() - 1)->GetCard();
+         CardDdz mincard;
+         mincard.SetValue(card.GetValue());
+         mincard.SetSuit(card.GetSuit());
+         temp.push_back(mincard);
+         a.copyGroup(temp);
+
+         std::vector<CardPicture*> cards;
+         cards = l.oppositeCards->PutCard(temp);
+         l.Last[2] = l.Last[1];
+         l.Last[1] = l.Last[0];
+         l.Last[0] = a;
+         emit l.PutValid();
+
+         for(int i=0; i<(int)cards.size();i++)
+         {
+             int size = cards.size();
+             cards[i]->setFixedSize(60,79);
+             cards[i]->move(l.width()*0.5-cards[i]->width()*0.5,cards[i]->y()+200);
+             cards[i]->move(l.width()*0.5 + (i-size/2-2)*cards[i]->width()/4,cards[i]->y());
+             cards[i]->setParent(&l);
+             cards[i]->show();
+             QObject::connect(&l,&LandlordOffline::OppositePut,cards[i],&CardPicture::close);
+         }
+         if(l.oppositeCards->GetCards().size() == 0) //出完了
+         {
+            l.isWin = true;
+            if(l.landlord != Seat::Opposite)
+                l.gameover = true;
+            emit l.Over();
+         }
+         l.PaintHandCards(*l.oppositeCards);
+         PutLeft(l);
         }
     });
 }
