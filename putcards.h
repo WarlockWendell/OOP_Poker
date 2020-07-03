@@ -14,4 +14,6 @@ void PutRight(LandlordOffline& l);
 void PutLeft(LandlordOffline& l);
 void PutOpposite(LandlordOffline& l);
 std::vector<CardDdz> GetSelectedCards(LandlordOffline& l);
+void sortcards(std::vector<CardPicture*>&,CardGroup a);
+bool CheckValid( CardGroup& a,  CardGroup& last1,  CardGroup& last2,  CardGroup& last3);
 #endif // PUTCARDS_H

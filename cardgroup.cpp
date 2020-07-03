@@ -37,27 +37,27 @@ bool CardGroup::isSeqSingle(bool shunzi){
             return false;
     }
 
-    sort(m_cardset.begin(), m_cardset.end());//升序排序
+    sort(m_cardset.begin(), m_cardset.end());//升序排序 //由于前面重载了比较符号，所以这里其实是按照A>3~K的习惯排序的
     int maxvalue = m_cardset[N-1].GetValue();
 
     //王不能出现在顺子中
     if(maxvalue==53 || maxvalue==54)
         return false;
     //2不能出现在顺子中
-    if(m_cardset[0].GetValue()==2||m_cardset[1].GetValue()==2)
+    if(m_cardset[N-1].GetValue()==2)//||m_cardset[1].GetValue()==2),只有可能这样了
         return false;
     //判断最后一张牌是否满足条件(由于CardValue的定义，需要额外考虑A)
-    if(m_cardset[0].GetValue()==CardValue::Card_A){ //如果最大点数为A
-        if(m_cardset[N-1].GetValue()!=CardValue::Card_K) //排序后最后一张牌应该是K
+    if(m_cardset[N-1].GetValue()==CardValue::Card_A){ //如果最大点数为A
+        if(m_cardset[N-2].GetValue()!=CardValue::Card_K) //排序后倒数第二张牌应该是K
             return false;
     }
     else{ //判断按点数升序排序后第一张是否合法(第一张不是A的情况）
-        if(m_cardset[1].GetValue()-m_cardset[0].GetValue()!=1)
+        if(m_cardset[N-1].GetValue()-m_cardset[N-2].GetValue()!=1)
             return false;
     }
 
     //判断后面N-1张的大小关系是否满足顺子条件
-    for(unsigned int i=1; i<N-1; i++){
+    for(unsigned int i=0; i<N-2; i++){
         if(m_cardset[i].GetValue()-m_cardset[i+1].GetValue()!=-1)
             return false;
     }
@@ -91,19 +91,19 @@ bool CardGroup::isSeqPair(){
     if(maxvalue==53||maxvalue==54)
         return false;
     //2不能出现在连对中
-    if(m_cardset[0].GetValue()==2||m_cardset[2].GetValue()==2)
+    if(m_cardset[N-1].GetValue()==2)//||m_cardset[2].GetValue()==2)
         return false;
-    if(m_cardset[0].GetValue()==CardValue::Card_A){ //如果最大点数为A
-        if(m_cardset[N-1].GetValue()!=13) //按点数排序后最后一对应为K""
+    if(m_cardset[N-1].GetValue()==CardValue::Card_A){ //如果最大点数为A
+        if(m_cardset[N-3].GetValue()!=13) //按点数排序后最后一对应为K""
             return false;
     }
-    else{ //保证第一对牌的合法性
-        if(m_cardset[2].GetValue()-m_cardset[1].GetValue()!=1)
+    else{ //保证最后一对牌的合法性
+        if(m_cardset[N-1].GetValue()-m_cardset[N-3].GetValue()!=1)
             return false;
     }
-    //判断后面N-1对牌
+    //判断后面n-1对牌
     unsigned int m=(N-2)/2;
-    for(unsigned int i=1; i<=m; i++){
+    for(unsigned int i=0; i<m-1; i++){
         if(m_cardset[i*2].GetValue()-m_cardset[i*2+2].GetValue()!=-1)
             return false;
     }
@@ -165,7 +165,28 @@ bool CardGroup::isPlanePair()const{
     for(unsigned int i=0; i<N; i++){
         if(cnt[m_cardset[i].GetValue()]==2) //如果是对子
                 cg1.addOne(m_cardset[i]);
-        else cg2.addOne(m_cardset[i]);
+        else if(cnt[m_cardset[i].GetValue()]==3)
+            cg2.addOne(m_cardset[i]);
+        else if(cnt[m_cardset[i].GetValue()]==5)
+        {
+            for(int j=0; j<2; j++)
+                cg1.addOne(m_cardset[i++]);
+            for(int j=0; j<3; j++)
+                cg2.addOne(m_cardset[i++]);
+            i--;
+        }
+        else if(cnt[m_cardset[i].GetValue()]==7)
+        {
+            for(int j=0; j<4; j++)
+                cg1.addOne(m_cardset[i++]);
+            for(int j=0; j<3; j++)
+                cg2.addOne(m_cardset[i++]);
+            i--;
+        }
+        else if(cnt[m_cardset[i].GetValue()]==4 ||cnt[m_cardset[i].GetValue()]==6 ||cnt[m_cardset[i].GetValue()]==8)
+        {
+            cg1.addOne(m_cardset[i]);
+        }
     }
     if(!cg2.isPlane()) return false; //判断剩下的牌是否为飞机
     return cg1.m_cardset.size()*3==cg2.m_cardset.size()*2;
@@ -298,7 +319,7 @@ int CardGroup::representPoint(HandType_DDZ type){
     {
         std::sort(m_cardset.begin(),m_cardset.end());//升序排序
         unsigned int N=m_cardset.size();
-        if(m_cardset[0].GetValue()==CardValue::Card_A){ //如果最大牌是A
+        if(m_cardset[N-1].GetValue()==CardValue::Card_A){ //如果最大牌是A
             return 14;
         }
         else return m_cardset[N-1].GetValue();
@@ -315,7 +336,7 @@ int CardGroup::representPoint(HandType_DDZ type){
     {
         std::sort(m_cardset.begin(),m_cardset.end());//升序排序
         unsigned int N=m_cardset.size();
-        if(m_cardset[0].GetValue()==CardValue::Card_A){
+        if(m_cardset[N-1].GetValue()==CardValue::Card_A){
             return 14;
         }
         else return m_cardset[N-1].GetValue();
@@ -345,7 +366,7 @@ int CardGroup::representPoint(HandType_DDZ type){
     {
         std::sort(m_cardset.begin(),m_cardset.end());//升序排序
         unsigned int N=m_cardset.size();
-        if(m_cardset[0].GetValue()==CardValue::Card_A){
+        if(m_cardset[N-1].GetValue()==CardValue::Card_A){
             return 14;
         }else
             return m_cardset[N-1].GetValue();

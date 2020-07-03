@@ -26,8 +26,6 @@ static void Switch(LandlordOffline& l,Seat seat)
         }
     }
 }
-
-
 void PutCards(LandlordOffline& l)
 {
     Switch(l,l.landlord); //第一次出牌
@@ -79,11 +77,11 @@ void PutSelf(LandlordOffline& l)
          CardGroup a;
          a.copyGroup(GetSelectedCards(l));
          //判断出牌是否有效
-         if((a.getHandType() != Unknown && a.compareTo(l.Last[0]) == CardGroup::Larger && \
-            a.compareTo(l.Last[1]) == CardGroup::Larger && a.compareTo(l.Last[2]) == CardGroup::Larger&& a.getHandType()!=Pass)) //有效
+         if(CheckValid(a,l.Last[0],l.Last[1],l.Last[2])) //有效
          {
              std::vector<CardPicture*> cards;
              cards = l.selfCards->PutCard(GetSelectedCards(l));
+             sortcards(cards,a);
              l.Last[2] = l.Last[1];
              l.Last[1] = l.Last[0];
              l.Last[0] = a;
@@ -102,6 +100,7 @@ void PutSelf(LandlordOffline& l)
                  cards[i]->move(l.width()*0.5-cards[i]->width()*0.5,l.height()/2 + 100);
                  cards[i]->move(l.width()*0.5 + (i-size/2-2)*cards[i]->width()/4,cards[i]->y());
                  cards[i]->setParent(&l);
+                 cards[i]->raise();
                  cards[i]->show();
                  QObject::connect(&l,&LandlordOffline::SelfPut,cards[i],&CardPicture::close);
              }
@@ -109,6 +108,7 @@ void PutSelf(LandlordOffline& l)
          }
     });
 
+    //不出
     QObject::connect(NotPut,&MyPushButton::MousePress,[&](){
             CardGroup a;
             l.Last[2] = l.Last[1];
@@ -124,7 +124,7 @@ void PutSelf(LandlordOffline& l)
 
             PutRight(l);
     });
-
+    //超时
     QObject::connect(clk,&Clock::TimeOut,[&](){
         //前面有人出了牌，超时就是不出
         if(l.Last[0].getHandType() != Pass || l.Last[1].getHandType() != Pass || l.Last[1].getHandType() != Pass)
@@ -155,6 +155,7 @@ void PutSelf(LandlordOffline& l)
 
             std::vector<CardPicture*> cards;
             cards = l.selfCards->PutCard(temp);
+            //sortcards(cards,a);
             l.Last[2] = l.Last[1];
             l.Last[1] = l.Last[0];
             l.Last[0] = a;
@@ -410,5 +411,101 @@ std::vector<CardDdz> GetSelectedCards(LandlordOffline& l)
     }
     return cards;
 }
+void sortcards(std::vector<CardPicture*>& cards,CardGroup a)
+{
+    //排序
+    std::reverse(cards.begin(),cards.end());
+    if(a.getHandType() == HandType_DDZ::TriplePair)  //如果是三带
+    {
+       if(cards[0]->GetCard().GetValue() != cards[2]->GetCard().GetValue())
+        {
+           std::swap(cards[0],cards[4]);
+           std::swap(cards[1],cards[3]);
+        }
+    }
+    else if(a.getHandType() == HandType_DDZ::PlanePair) //飞机带翅膀
+    {
+        int cnt[54] = {0};
+        for(int  i=0; i<(int)cards.size();i++) //计数
+        {
+            cnt[cards[i]->GetCard().GetValue()] ++;
+        }
+        int N = a.getGroupCount() / 5;
+        int pair_cnt = 0;
+        int three_cnt = 0;
+        std::vector<CardPicture*> temp(cards);
+        for(int i=0; i<N*5 ; i++)
+        {
+            if(cnt[cards[i]->GetCard().GetValue()]== 2)
+            {
+               temp[3*N + pair_cnt] = cards[i];
+                pair_cnt ++;
+            }
+            else if(cnt[cards[i]->GetCard().GetValue()]== 3)
+            {
+                temp[three_cnt] = cards[i];
+                three_cnt ++;
+            }
+            else if(cnt[cards[i]->GetCard().GetValue()]== 5)
+            {
+               for(int j =0; j< 3; j++)
+               {
 
+                temp[three_cnt] = cards[i++];
+                three_cnt ++;
+               }
+               for(int j=0; j<2; j++)
+               {
+                 temp[3*N + pair_cnt] = cards[i++];
+                 pair_cnt ++;
+               }
+               i--;
+            }
+            else if(cnt[cards[i]->GetCard().GetValue()]== 7)
+            {
+                 for(int j =0; j< 3; j++)
+                 {
 
+                  temp[three_cnt] = cards[i++];
+                  three_cnt ++;
+                 }
+                 for(int j=0; j<4; j++)
+                 {
+                   temp[3*N + pair_cnt] = cards[i++];
+                   pair_cnt ++;
+                 }
+                 i--;
+            }
+            else if(cnt[cards[i]->GetCard().GetValue()]==4 || cnt[cards[i]->GetCard().GetValue()]== 6 || cnt[cards[i]->GetCard().GetValue()]== 8)
+            {
+                temp[3*N + pair_cnt] = cards[i];
+                pair_cnt ++;
+            }
+        }
+        cards.swap(temp);
+    }
+}
+
+bool CheckValid(CardGroup& a, CardGroup& last1,  CardGroup& last2,  CardGroup& last3)
+{
+    //相同优先级，不同的长度，肯定不行
+    if( (a.priority(a.getHandType()) == last1.priority(last1.getHandType())) && a.getGroupCount() != last1.getGroupCount())
+        return false;
+    if((a.priority(a.getHandType()) == last2.priority(last1.getHandType())) && a.getGroupCount() != last2.getGroupCount())
+        return false;
+    if((a.priority(a.getHandType()) == last1.priority(last3.getHandType())) && a.getGroupCount() != last3.getGroupCount())
+        return false;
+    //相同优先级，不同类型，不行
+    if((a.priority(a.getHandType()) == last1.priority(last1.getHandType())) && a.getHandType() != last1.getHandType())
+        return false;
+    if((a.priority(a.getHandType()) == last2.priority(last1.getHandType())) && a.getHandType() != last2.getHandType())
+        return false;
+    if((a.priority(a.getHandType()) == last1.priority(last3.getHandType())) && a.getHandType() != last3.getHandType())
+        return false;
+    //正常比较
+    if((a.getHandType() != Unknown && a.compareTo(last1) == CardGroup::Larger && \
+        a.compareTo(last2) == CardGroup::Larger && a.compareTo(last3) == CardGroup::Larger&& a.getHandType()!=Pass))
+    return true;
+
+    return false;
+}
