@@ -7,9 +7,10 @@
 #include <QObject>
 #include <QWidget>
 #include <QPoint>
+#include "cardgroup.h"
 #include "cardpicture.h"
 
-class HandCards //: public QWidget
+class HandCards : public CardGroup
 {
     Seat seat;
 protected:
@@ -26,3 +27,4 @@ signals:
 };
 
 #endif // HANDCARDS_H
+
