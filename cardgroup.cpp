@@ -35,22 +35,24 @@ bool CardGroup::isSeqSingle(bool shunzi){
     sort(m_cardset.begin(), m_cardset.end());//升序排序
     int maxvalue = m_cardset[N-1].GetValue();
 
-    //最大点数大于A的顺子不合法
-    if(maxvalue==2 || maxvalue==53 || maxvalue==54)
+    //王不能出现在顺子中
+    if(maxvalue==53 || maxvalue==54)
         return false;
-
+    //2不能出现在顺子中
+    if(m_cardset[0].GetValue()==2||m_cardset[1].GetValue()==2)
+        return false;
     //判断最后一张牌是否满足条件(由于CardValue的定义，需要额外考虑A)
-    if(maxvalue==1){ //如果最大点数为A
-        if(m_cardset[N-1].GetValue()!=13)
+    if(m_cardset[0].GetValue()==CardValue::Card_A){ //如果最大点数为A
+        if(m_cardset[N-1].GetValue()!=CardValue::Card_K) //排序后最后一张牌应该是K
             return false;
     }
-    else{
-        if(m_cardset[N-2].GetValue()-m_cardset[N-1].GetValue()!=-1)
+    else{ //判断按点数升序排序后第一张是否合法(第一张不是A的情况）
+        if(m_cardset[1].GetValue()-m_cardset[0].GetValue()!=1)
             return false;
     }
 
-    //判断前N-1张的大小关系是否满足顺子条件
-    for(unsigned int i=0; i<N-2; i++){
+    //判断后面N-1张的大小关系是否满足顺子条件
+    for(unsigned int i=1; i<N-1; i++){
         if(m_cardset[i].GetValue()-m_cardset[i+1].GetValue()!=-1)
             return false;
     }
@@ -80,18 +82,24 @@ bool CardGroup::isSeqPair(){
     //判断是否满足"连对"连续的特点
     //判断最后一对牌是否满足条件(由于CardValue的定义，需要额外考虑A)
     int maxvalue = m_cardset[N-1].GetValue();
-    if(maxvalue==1){ //如果最大点数为A
-        if(m_cardset[N-3].GetValue()!=13)
+    //王不能出现在连对中
+    if(maxvalue==53||maxvalue==54)
+        return false;
+    //2不能出现在连对中
+    if(m_cardset[0].GetValue()==2||m_cardset[2].GetValue()==2)
+        return false;
+    if(m_cardset[0].GetValue()==CardValue::Card_A){ //如果最大点数为A
+        if(m_cardset[N-1].GetValue()!=13) //按点数排序后最后一对应为K""
             return false;
     }
-    else{
-        if(m_cardset[N-3].GetValue()-m_cardset[N-1].GetValue()!=-1)
+    else{ //保证第一对牌的合法性
+        if(m_cardset[2].GetValue()-m_cardset[1].GetValue()!=1)
             return false;
     }
-    //判断前N-2对牌
-    unsigned int m=(N-4)/2;
+    //判断后面N-1对牌
+    unsigned int m=(N-2)/2;
     for(unsigned int i=1; i<=m; i++){
-        if(m_cardset[i*2-1].GetValue()-m_cardset[i*2].GetValue()!=-1)
+        if(m_cardset[i*2].GetValue()-m_cardset[i*2+2].GetValue()!=-1)
             return false;
     }
     return true;
@@ -172,15 +180,6 @@ bool CardGroup::isBomb()const{
 
 //判断牌型是否为"王炸"
 bool CardGroup::isBombJoker()const{
-//    unsigned int N=m_cardset.size();
-//    if(N!=2) //张数
-//        return false;
-//    //牌型
-//    if(m_cardset[0].GetValue()==53&&m_cardset[1].GetValue()==54)
-//        return true;
-//    if(m_cardset[0].GetValue()==54&&m_cardset[1].GetValue()==53)
-//        return true;
-//    return false;
     //修改：四人斗地主中王炸类型为四张王，并非两张王
     unsigned int N=m_cardset.size();
     if(N!=4) //张数
@@ -232,7 +231,13 @@ int CardGroup::representPoint(HandType_DDZ type){
     case HandType_DDZ::Pass: //过
         return CardValue::Card_Begin;
     case HandType_DDZ::Single: //单
+    {
+        if(m_cardset[0].GetValue()==CardValue::Card_A)
+            return 14;
+        else if(m_cardset[0].GetValue()==CardValue::Card_2)
+            return 15;
         return m_cardset[0].GetValue();
+    }
     case HandType_DDZ::SeqSingle: //顺子
     {
         std::sort(m_cardset.begin(),m_cardset.end());//升序排序
@@ -243,7 +248,13 @@ int CardGroup::representPoint(HandType_DDZ type){
         else return m_cardset[N-1].GetValue();
     }
     case HandType_DDZ::Pair: //对子
+    {
+        if(m_cardset[0].GetValue()==CardValue::Card_A)
+            return 14;
+        else if(m_cardset[0].GetValue()==CardValue::Card_2)
+            return 15;
         return m_cardset[0].GetValue();
+    }
     case HandType_DDZ::SeqPair: //连对
     {
         std::sort(m_cardset.begin(),m_cardset.end());//升序排序
@@ -254,13 +265,25 @@ int CardGroup::representPoint(HandType_DDZ type){
         else return m_cardset[N-1].GetValue();
     }
     case HandType_DDZ::Triple: //三
+    {
+        if(m_cardset[0].GetValue()==CardValue::Card_A)
+            return 14;
+        else if(m_cardset[0].GetValue()==CardValue::Card_2)
+            return 15;
         return m_cardset[0].GetValue();
+    }
     case HandType_DDZ::TriplePair: //三带二
     {
-         std::sort(m_cardset.begin(),m_cardset.end());//升序排序
-         if(m_cardset[2]==m_cardset[3]){ //如果后三张是"三"
-             return m_cardset[2].GetValue();
-         }else return m_cardset[0].GetValue();
+        unsigned int count[54];
+        unsigned int n=m_cardset.size();
+        for(unsigned int i=0;i<n;i++) //获得每种点数的牌有多少张
+            count[m_cardset[i].GetValue()]++;
+        CardGroup cg_tri;
+        for(unsigned int i=0;i<n;i++){
+            if(count[m_cardset[i].GetValue()]==3)
+                cg_tri.addOne(m_cardset[i]);
+        }
+        return cg_tri.representPoint(HandType_DDZ::Triple);
     }
     case HandType_DDZ::Plane: //飞机
     {
@@ -319,4 +342,3 @@ CardGroup::CompareResult CardGroup::compareTo(CardGroup &comgroup){
     }
     return CompareResult::NotMatch; //无法比较
 }
-
