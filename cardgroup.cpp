@@ -100,7 +100,7 @@ bool CardGroup::isSeqPair(){
 //判断牌型是否为"三张"
 bool CardGroup::isTriple()const{
     unsigned int N=m_cardset.size();
-    return (N=3&&m_cardset[0]==m_cardset[1]&&m_cardset[1]==m_cardset[2]);
+    return (N==3&&m_cardset[0]==m_cardset[1]&&m_cardset[1]==m_cardset[2]);
 }
 
 //判断牌型是否为"三顺":555666...
@@ -172,15 +172,26 @@ bool CardGroup::isBomb()const{
 
 //判断牌型是否为"王炸"
 bool CardGroup::isBombJoker()const{
+//    unsigned int N=m_cardset.size();
+//    if(N!=2) //张数
+//        return false;
+//    //牌型
+//    if(m_cardset[0].GetValue()==53&&m_cardset[1].GetValue()==54)
+//        return true;
+//    if(m_cardset[0].GetValue()==54&&m_cardset[1].GetValue()==53)
+//        return true;
+//    return false;
+    //修改：四人斗地主中王炸类型为四张王，并非两张王
     unsigned int N=m_cardset.size();
-    if(N!=2) //张数
+    if(N!=4) //张数
         return false;
     //牌型
-    if(m_cardset[0].GetValue()==53&&m_cardset[1].GetValue()==54)
-        return true;
-    if(m_cardset[0].GetValue()==54&&m_cardset[1].GetValue()==53)
-        return true;
-    return false;
+    for(int i =0; i< 4; i++)
+    {
+        if(m_cardset[i] != 53 || m_cardset[i] != 54)
+            return false;
+    }
+    return true;
 }
 
 //获得牌组的类型
@@ -202,10 +213,11 @@ HandType_DDZ CardGroup::getHandType(){
 //计算优先级
 int CardGroup::priority(HandType_DDZ type){
     switch (type) {
+        //优先级应该有王炸>8炸>7炸>6炸>5炸>4炸
         case HandType_DDZ::BombJoker:
-            return 5;
+            return 9;
         case HandType_DDZ::Bomb:
-            return 4;
+            return m_cardset.size();
         case HandType_DDZ::Pass:
             return 2;
         case HandType_DDZ::Unknown:
@@ -216,11 +228,16 @@ int CardGroup::priority(HandType_DDZ type){
 
 //牌型代表的点数
 int CardGroup::representPoint(HandType_DDZ type){
-    switch (type) {
+    switch ((int)type) {
     case HandType_DDZ::Pass: //过
         return CardValue::Card_Begin;
     case HandType_DDZ::Single: //单
-        return m_cardset[0].GetValue();
+    {
+        if(m_cardset[0].GetValue() == 1 || m_cardset[0].GetValue() == 2)
+            return m_cardset[0].GetValue() + 13;
+        else
+            return m_cardset[0].GetValue();
+    }
     case HandType_DDZ::SeqSingle: //顺子
     {
         std::sort(m_cardset.begin(),m_cardset.end());//升序排序
@@ -231,7 +248,12 @@ int CardGroup::representPoint(HandType_DDZ type){
         else return m_cardset[N-1].GetValue();
     }
     case HandType_DDZ::Pair: //对子
-        return m_cardset[0].GetValue();
+    {
+        if(m_cardset[0].GetValue() == 1 || m_cardset[0].GetValue() == 2)
+            return m_cardset[0].GetValue() + 13;
+        else
+            return m_cardset[0].GetValue();
+    }
     case HandType_DDZ::SeqPair: //连对
     {
         std::sort(m_cardset.begin(),m_cardset.end());//升序排序
@@ -242,13 +264,28 @@ int CardGroup::representPoint(HandType_DDZ type){
         else return m_cardset[N-1].GetValue();
     }
     case HandType_DDZ::Triple: //三
+    {
+        if(m_cardset[0].GetValue() == 1 || m_cardset[0].GetValue() == 2)
+            return m_cardset[0].GetValue() + 13;
+        else
+            return m_cardset[0].GetValue();
         return m_cardset[0].GetValue();
+    }
     case HandType_DDZ::TriplePair: //三带二
     {
          std::sort(m_cardset.begin(),m_cardset.end());//升序排序
          if(m_cardset[2]==m_cardset[3]){ //如果后三张是"三"
-             return m_cardset[2].GetValue();
-         }else return m_cardset[0].GetValue();
+             if(m_cardset[2].GetValue() == 1 || m_cardset[2].GetValue() == 2)
+                 return m_cardset[2].GetValue() + 13;
+             else
+                 return m_cardset[0].GetValue();
+         }else
+         {
+             if(m_cardset[0].GetValue() == 1 || m_cardset[0].GetValue() == 2)
+                 return m_cardset[0].GetValue() + 13;
+             else
+                 return m_cardset[0].GetValue();
+         }
     }
     case HandType_DDZ::Plane: //飞机
     {
@@ -275,7 +312,12 @@ int CardGroup::representPoint(HandType_DDZ type){
         return cg.representPoint(HandType_DDZ::Plane);
     }
     case HandType_DDZ::Bomb: //炸弹
-        return m_cardset[0].GetValue();
+    {
+        if(m_cardset[0].GetValue() == 1 || m_cardset[0].GetValue() == 2)
+            return m_cardset[0].GetValue() + 13;
+        else
+            return m_cardset[0].GetValue();
+    }
     case HandType_DDZ::BombJoker: //王炸
         return 53;
     }
@@ -294,6 +336,9 @@ CardGroup::CompareResult CardGroup::compareTo(CardGroup &comgroup){
     else if(thisPriority<comPriority) //优先级小
         return CompareResult::Smaller;
     else if(thisPriority==comPriority){ //优先级相同
+        //优先级相同时，这里都不是炸弹，需要类型相同才可比较
+        if(thisType != comType)
+            return CompareResult::NotMatch;
         int thisValue = representPoint(thisType);
         int comValue = comgroup.representPoint(comType);
         if(thisValue>comValue) //点数大

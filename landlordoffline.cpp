@@ -9,15 +9,27 @@
 #include <QEventLoop>
 #include <QThread>
 #include <ctime>
+#include <QTimer>
 #include "calllandlord.h"
+#include "gameover.h"
+#include "putcards.h"
 LandlordOffline::LandlordOffline(QWidget *parent) : QMainWindow(parent)
 {
     setFixedSize(1200,800);
     //四个玩家的手牌区
-    selfCards = new HandCards(Seat::Self);
-    leftCards = new HandCards(Seat::Left);
-    rightCards = new HandCards(Seat::Right);
-    oppositeCards = new HandCards(Seat::Opposite);
+    selfCards = new HandCardsLandlord(Seat::Self);
+    leftCards = new HandCardsLandlord(Seat::Left);
+    rightCards = new HandCardsLandlord(Seat::Right);
+    oppositeCards = new HandCardsLandlord(Seat::Opposite);
+
+    //游戏是否结束
+    connect(this,&LandlordOffline::Over,[&]()
+    {
+        GameOver* gameover = new GameOver(isWin);
+        gameover->setGeometry(this->geometry());
+        this->close();
+        gameover->show();
+    });
 }
 
 void LandlordOffline::InitGame()
@@ -120,6 +132,7 @@ void LandlordOffline::StartGame()
                 cardpictures[j]->SetSeat(Seat::Self);
                 cardpictures[j]->raise();
                 selfCards->GetOneHand(cardpictures[j]);
+                PaintHandCards(*selfCards);
             break;
             case Seat::Left:
                 cardpictures[j]->SetShow(false);
@@ -127,6 +140,7 @@ void LandlordOffline::StartGame()
                 cardpictures[j]->raise();
                 cardpictures[j]->setFixedSize(79,60);
                 leftCards->GetOneHand(cardpictures[j]);
+                PaintHandCards(*leftCards);
             break;
             case Seat::Right:
                 cardpictures[j]->SetShow(false);
@@ -134,6 +148,7 @@ void LandlordOffline::StartGame()
                 cardpictures[j]->raise();
                 cardpictures[j]->setFixedSize(79,60);
                 rightCards->GetOneHand(cardpictures[j]);
+                PaintHandCards(*rightCards);
             break;
             case Seat::Opposite:
                 cardpictures[j]->SetShow(false);
@@ -141,6 +156,7 @@ void LandlordOffline::StartGame()
                 cardpictures[j]->raise();
                 cardpictures[j]->setFixedSize(60,79);
                 oppositeCards->GetOneHand(cardpictures[j]);
+                PaintHandCards(*oppositeCards);
             break;
         default:
             break;
@@ -151,10 +167,10 @@ void LandlordOffline::StartGame()
     PaintHandCards(*leftCards);
     PaintHandCards(*rightCards);
     PaintHandCards(*oppositeCards);
-    //设置自己的牌可以被点击
+    //设置自己的牌不可以被点击
     for(int i=0; i<(int)selfCards->GetCards().size(); i++)
     {
-        selfCards->GetCards().at(i)->SetAllowClick(true);
+        selfCards->GetCards().at(i)->SetAllowClick(false);
     }
 }
 
@@ -163,6 +179,7 @@ void LandlordOffline::MainGame()
 {
     CallLandlord(*this);
     //clk->show();
+    PutCards(*this);
 }
 
 //绘制手牌区手牌
@@ -235,6 +252,7 @@ void LandlordOffline::AddBottomCards(Seat seat) //这个人当地主，给它底
     switch((int)seat)
     {
         case Seat::Self:
+        {
             for(int i = 0; i<(int)bottomCards.size(); i++)
             {
                 cardpictures[i+100]->setFixedSize(selfCards->GetCards().at(i)->size());
@@ -248,7 +266,8 @@ void LandlordOffline::AddBottomCards(Seat seat) //这个人当地主，给它底
             {
                 cardpictures[i]->SetAllowClick(true);
             }
-        break;
+            break;
+        }
         case Seat::Left:
             for(int i = 0; i<(int)bottomCards.size(); i++)
             {
@@ -286,5 +305,9 @@ void LandlordOffline::AddBottomCards(Seat seat) //这个人当地主，给它底
     for(int i=0; i<(int)bottomCards.size();i++)
     {
         bottomCards[i]->SetShow(true);
+    }
+    for(int i=0; i<(int)selfCards->GetCards().size(); i++)
+    {
+        selfCards->GetCards().at(i)->SetAllowClick(true);
     }
 }

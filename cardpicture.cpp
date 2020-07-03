@@ -153,3 +153,8 @@ void CardPicture::mousePressEvent(QMouseEvent *event)
         }
     }
 }
+
+bool CardPicture::GetSelete()
+{
+    return IsSelected;
+}

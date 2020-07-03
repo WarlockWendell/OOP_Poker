@@ -1,3 +1,5 @@
+#ifndef GAMEOVER_H
+#define GAMEOVER_H
 #include <QWidget>
 #include <QLabel>
 #include <QPushButton>

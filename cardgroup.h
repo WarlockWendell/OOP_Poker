@@ -23,10 +23,10 @@ public:
     CardGroup(); //构造
     void copyGroup(const vector<CardDdz> group); //拷贝卡组
     void addOne(const CardDdz &card_ddz); //添加一张牌至牌组
-    //HandType_DDZ getHandType(); //获得牌组的类型
-    static int priority(HandType_DDZ type); //计算优先级，属于整个类的静态成员函数
+    HandType_DDZ getHandType(); //获得牌组的类型
+    int priority(HandType_DDZ type); //计算优先级，属于整个类的静态成员函数  由于炸弹需要使用张数来确定优先级，所以还是不用静态了
     CompareResult compareTo(CardGroup &combine); //比较两个牌型，返回比较结果
-    CardValue representPoint(HandType_DDZ type); //牌型代表的点数
+    int representPoint(HandType_DDZ type); //牌型代表的点数
    
 
 

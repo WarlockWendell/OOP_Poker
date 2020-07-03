@@ -38,6 +38,7 @@ public:
     Card GetCard();
     Seat GetSeat();
     bool GetShow();
+    bool GetSelete();
     void SetAllowClick(bool b);
     QPixmap GetCardPicFront();
     QPixmap GetCardPicBack();

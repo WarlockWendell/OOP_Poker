@@ -9,7 +9,6 @@
 #include "mypushbutton.h"
 #include <ctime>
 #include <cstdlib>
-#include "QThread"
 void CallLandlord(LandlordOffline& l);
 void CallSelf(LandlordOffline& l);
 void CallRight(LandlordOffline& l);

@@ -20,16 +20,20 @@ SOURCES += \
     calllandlord.cpp \
     card.cpp \
     card_ddz.cpp \
+    cardgroup.cpp \
     cardpicture.cpp \
     choosegame.cpp \
     clock.cpp \
+    gameover.cpp \
     handcards.cpp \
     handcards_blackjack.cpp \
+    handcards_landlord.cpp \
     landlordoffline.cpp \
     landlordofflinedesk.cpp \
     main.cpp \
     mainscene.cpp \
     mypushbutton.cpp \
+    putcards.cpp \
     shuffle.cpp
 
 HEADERS += \
@@ -38,15 +42,19 @@ HEADERS += \
     calllandlord.h \
     card.h \
     card_ddz.h \
+    cardgroup.h \
     cardpicture.h \
     choosegame.h \
     clock.h \
+    gameover.h \
     handcards.h \
     handcards_blackjack.h \
+    handcards_landlord.h \
     landlordoffline.h \
     landlordofflinedesk.h \
     mainscene.h \
     mypushbutton.h \
+    putcards.h \
     shuffle.h
 
 FORMS +=

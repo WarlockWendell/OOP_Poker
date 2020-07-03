@@ -26,5 +26,10 @@
         <file>Image/next_game_button.png</file>
         <file>Image/button.png</file>
         <file>Image/landlord_image.png</file>
+        <file>Image/again.PNG</file>
+        <file>Image/exit.PNG</file>
+        <file>Image/lose.PNG</file>
+        <file>Image/return.PNG</file>
+        <file>Image/victory.PNG</file>
     </qresource>
 </RCC>
