@@ -14,6 +14,11 @@ void CardGroup::addOne(const CardDdz &card_ddz){
     m_cardset.push_back(card_ddz);
 }
 
+//获得卡组
+vector <CardDdz> CardGroup::getGroup()const{
+    return m_cardset;
+}
+
 //判断牌型是否为"过"
 bool CardGroup::isPass()const{
     return m_cardset.size()==0;
