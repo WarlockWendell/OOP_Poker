@@ -22,6 +22,7 @@ public:
     };
     CardGroup(); //构造
     void copyGroup(const vector<CardDdz> group); //拷贝卡组
+    vector <CardDdz> getGroup()const; //获得卡组
     void addOne(const CardDdz &card_ddz); //添加一张牌至牌组
 
     void setHandType(HandType_DDZ type); //设置牌组的类型
@@ -35,7 +36,7 @@ public:
     void setGroupValue(int value); //设置牌组的价值
 
 private:
-    vector<CardDdz> m_cardset;
+    vector<CardDdz> m_cardset; //牌组
     HandType_DDZ m_cardgrouptype; //这组牌的牌型
     int m_count; //牌组的张数
     int m_value; //牌型的价值
