@@ -232,12 +232,7 @@ int CardGroup::representPoint(HandType_DDZ type){
     case HandType_DDZ::Pass: //过
         return CardValue::Card_Begin;
     case HandType_DDZ::Single: //单
-    {
-        if(m_cardset[0].GetValue() == 1 || m_cardset[0].GetValue() == 2)
-            return m_cardset[0].GetValue() + 13;
-        else
-            return m_cardset[0].GetValue();
-    }
+        return m_cardset[0].GetValue();
     case HandType_DDZ::SeqSingle: //顺子
     {
         std::sort(m_cardset.begin(),m_cardset.end());//升序排序
@@ -248,12 +243,7 @@ int CardGroup::representPoint(HandType_DDZ type){
         else return m_cardset[N-1].GetValue();
     }
     case HandType_DDZ::Pair: //对子
-    {
-        if(m_cardset[0].GetValue() == 1 || m_cardset[0].GetValue() == 2)
-            return m_cardset[0].GetValue() + 13;
-        else
-            return m_cardset[0].GetValue();
-    }
+        return m_cardset[0].GetValue();
     case HandType_DDZ::SeqPair: //连对
     {
         std::sort(m_cardset.begin(),m_cardset.end());//升序排序
@@ -264,28 +254,13 @@ int CardGroup::representPoint(HandType_DDZ type){
         else return m_cardset[N-1].GetValue();
     }
     case HandType_DDZ::Triple: //三
-    {
-        if(m_cardset[0].GetValue() == 1 || m_cardset[0].GetValue() == 2)
-            return m_cardset[0].GetValue() + 13;
-        else
-            return m_cardset[0].GetValue();
         return m_cardset[0].GetValue();
-    }
     case HandType_DDZ::TriplePair: //三带二
     {
          std::sort(m_cardset.begin(),m_cardset.end());//升序排序
          if(m_cardset[2]==m_cardset[3]){ //如果后三张是"三"
-             if(m_cardset[2].GetValue() == 1 || m_cardset[2].GetValue() == 2)
-                 return m_cardset[2].GetValue() + 13;
-             else
-                 return m_cardset[0].GetValue();
-         }else
-         {
-             if(m_cardset[0].GetValue() == 1 || m_cardset[0].GetValue() == 2)
-                 return m_cardset[0].GetValue() + 13;
-             else
-                 return m_cardset[0].GetValue();
-         }
+             return m_cardset[2].GetValue();
+         }else return m_cardset[0].GetValue();
     }
     case HandType_DDZ::Plane: //飞机
     {
@@ -312,12 +287,7 @@ int CardGroup::representPoint(HandType_DDZ type){
         return cg.representPoint(HandType_DDZ::Plane);
     }
     case HandType_DDZ::Bomb: //炸弹
-    {
-        if(m_cardset[0].GetValue() == 1 || m_cardset[0].GetValue() == 2)
-            return m_cardset[0].GetValue() + 13;
-        else
-            return m_cardset[0].GetValue();
-    }
+        return m_cardset[0].GetValue();
     case HandType_DDZ::BombJoker: //王炸
         return 53;
     }
