@@ -34,9 +34,9 @@ public:
     CompareResult compareTo(CardGroup &combine); //比较两个牌型，返回比较结果
     int representPoint(HandType_DDZ type); //牌型代表的点数
     void setGroupValue(int value); //设置牌组的价值
-
-private:
+protected:
     vector<CardDdz> m_cardset; //牌组
+private:
     HandType_DDZ m_cardgrouptype; //这组牌的牌型
     int m_count; //牌组的张数
     int m_value; //牌型的价值

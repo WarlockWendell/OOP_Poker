@@ -132,7 +132,7 @@ void LandlordOffline::StartGame()
                 cardpictures[j]->SetSeat(Seat::Self);
                 cardpictures[j]->raise();
                 selfCards->GetOneHand(cardpictures[j]);
-                PaintHandCards(*selfCards);
+                //PaintHandCards(*selfCards);
             break;
             case Seat::Left:
                 cardpictures[j]->SetShow(false);
@@ -140,7 +140,7 @@ void LandlordOffline::StartGame()
                 cardpictures[j]->raise();
                 cardpictures[j]->setFixedSize(79,60);
                 leftCards->GetOneHand(cardpictures[j]);
-                PaintHandCards(*leftCards);
+                //PaintHandCards(*leftCards);
             break;
             case Seat::Right:
                 cardpictures[j]->SetShow(false);
@@ -148,7 +148,7 @@ void LandlordOffline::StartGame()
                 cardpictures[j]->raise();
                 cardpictures[j]->setFixedSize(79,60);
                 rightCards->GetOneHand(cardpictures[j]);
-                PaintHandCards(*rightCards);
+                //PaintHandCards(*rightCards);
             break;
             case Seat::Opposite:
                 cardpictures[j]->SetShow(false);
@@ -156,7 +156,7 @@ void LandlordOffline::StartGame()
                 cardpictures[j]->raise();
                 cardpictures[j]->setFixedSize(60,79);
                 oppositeCards->GetOneHand(cardpictures[j]);
-                PaintHandCards(*oppositeCards);
+                //PaintHandCards(*oppositeCards);
             break;
         default:
             break;

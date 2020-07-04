@@ -17,6 +17,8 @@ std::vector<CardPicture*> HandCardsLandlord::PutCard(std::vector<CardDdz> a) //�
             Cards.push_back(temp);
             handcards.at(i)->close();
             handcards.erase(handcards.begin()+i);
+            //update : 由于HandCards继承自CardGroup, 所以减少一张牌时，也需要减少m_cardset中的牌
+            m_cardset.erase(m_cardset.begin()+i);
             j--;
             if(j<0) //找完了
                 break;

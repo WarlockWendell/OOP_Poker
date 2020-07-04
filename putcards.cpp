@@ -505,7 +505,7 @@ bool CheckValid(CardGroup& a, CardGroup& last1,  CardGroup& last2,  CardGroup& l
     //正常比较
     if((a.getHandType() != Unknown && a.compareTo(last1) == CardGroup::Larger && \
         a.compareTo(last2) == CardGroup::Larger && a.compareTo(last3) == CardGroup::Larger&& a.getHandType()!=Pass))
-    return true;
+        return true;
 
     return false;
 }
