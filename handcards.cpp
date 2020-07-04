@@ -6,14 +6,27 @@
 HandCards::HandCards(Seat s):seat(s)
 {
 }
+
+//设置玩家的位置
 void HandCards::SetSeat(Seat s)
 {
     seat = s;
 }
 
+//获得玩家的位置信息
 Seat HandCards::GetSeat()
 {
     return seat;
+}
+
+//为成员数据“手牌张数”赋值
+void HandCards::SetCount(unsigned int c){
+    this->HandCardCount = c;
+}
+
+//获取手牌的张数
+unsigned int HandCards::GetCount()const{
+    return handcards.size();
 }
 
 //发一张牌，参数是发的牌
@@ -27,7 +40,7 @@ void HandCards::GetOneHand(CardPicture* cardPic)
     addOne(card);
 }
 
-//降序排序
+//降序排序,比较两张牌的大小，若a>b则返回true
 static bool GreatSort(CardPicture* a, CardPicture* b)
 {
     int valuea = (int)a->GetCard().GetValue();
@@ -71,8 +84,8 @@ void HandCards::SortCards()
     std::sort(m_cardset.begin(),m_cardset.end(),GreaterSort);
 }
 
+//获得手牌堆
 std::vector<CardPicture*> HandCards::GetCards()
 {
     return handcards;
 }
-
