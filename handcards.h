@@ -13,6 +13,7 @@
 class HandCards : public CardGroup
 {
     Seat seat;
+    unsigned int HandCardCount; //手牌张数
 protected:
     std::vector<CardPicture*> handcards; //牌
 public:
@@ -20,6 +21,8 @@ public:
     void GetOneHand(CardPicture* cardPic); //获取一张手牌
     void SetSeat(Seat s);
     Seat GetSeat();
+    void SetCount(unsigned int c); //为成员数据“手牌张数”赋值
+    unsigned int GetCount()const; //获取手牌的张数
     void SortCards();  //将牌排序
     std::vector<CardPicture*> GetCards();
 signals:
@@ -27,4 +30,3 @@ signals:
 };
 
 #endif // HANDCARDS_H
-
