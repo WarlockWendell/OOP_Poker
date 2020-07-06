@@ -81,7 +81,7 @@ bool HandCardsBlackjack::IsBlackjack() const
                 hasA = true;
             }
         }
-        else if (value >= 11 && value <= 13)
+        else if (value >= 10 && value <= 13)
         {
             // 10。
             if (has10)
@@ -146,6 +146,11 @@ int HandCardsBlackjack::Compare (const HandCardsBlackjack &Cards) const
             result = 3;
         }
     }
+    else if (Cards.IsBlackjack())
+    {
+        // 对面为黑杰克的情况，此时这边不是黑杰克，必输。
+        result = -3;
+    }
     else if (this->IsHit())
     {
         // 爆牌的情况
@@ -164,11 +169,6 @@ int HandCardsBlackjack::Compare (const HandCardsBlackjack &Cards) const
     {
         // 对面爆牌的情况，此时这边没有爆牌，必赢。
         result = 2;
-    }
-    else if (Cards.IsBlackjack())
-    {
-        // 对面为黑杰克的情况，此时这边不是黑杰克，必输。
-        result = -3;
     }
     else if (!this->IsHit() && handcards.size() >= 5)
     {
